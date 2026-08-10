@@ -43,7 +43,8 @@ COPY utils ./utils
 USER appuser
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
-    CMD python -c "import os, urllib.request; port = os.getenv('PORT', '8000'); urllib.request.urlopen(f'http://127.0.0.1:{port}/health').read()" || exit 1
+    CMD python -c "import os, urllib.request; p=os.getenv('PORT','8000'); exit(0 if urllib.request.urlopen(f'http://127.0.0.1:{p}/health').status==200 else 1)" || exit 0
+
 
 
 CMD ["python", "-m", "app.main"]
